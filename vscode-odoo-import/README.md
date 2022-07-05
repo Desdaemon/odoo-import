@@ -1,70 +1,25 @@
-# vscode-odoo-import README
+## vscode-odoo-import
 
-This is the README for your extension "vscode-odoo-import". After writing up a brief description, we recommend including the following sections.
+Enable Odoo module discovery and autocompletions.
 
-## Features
+Odoo's internal JavaScript codebase dates before the standardization of ES6 modules, so some wiring is required to make things visible to TypeScript. This includes:
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Parsing @odoo-module pragmas and rerouting imports
+- Rewriting classic imports to be understood as proper modules (in-progress!)
+- Injecting module completions for great profit
 
-For example if there is an image subfolder under your extension project workspace:
+It is still very barebones right now with no customizations yet, so file an issue or let me know of what doesn't work or is missing!
 
-\!\[feature X\]\(images/feature-x.png\)
+### Extension Settings
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Todo!
 
-## Requirements
+### Known Issues
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Multiple classic modules in one file are not entirely supported right now (i.e. `odoo.define('foo')` modules)
 
-## Extension Settings
+### Release Notes
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+#### 0.0.1
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release
