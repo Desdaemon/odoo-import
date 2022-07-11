@@ -1,5 +1,9 @@
 import { Walker } from "./walker";
 
+interface Config {
+  addonDirectories?: string[]
+}
+
 /**
  * Since this file needs to be injected before any other code runs,
  * abuse setters to apply these monkeypatches once their targets exist.
@@ -51,10 +55,18 @@ function init(modules: {
   typescript: typeof import("typescript/lib/tsserverlibrary");
 }) {
   const ts = modules.typescript;
+  let config: Config;
+  let refresh: Function | undefined
+  function onConfigurationUpdated(config_: Config) {
+    config = config_
+    refresh?.()
+  }
 
   function create(info: ts.server.PluginCreateInfo) {
+    refresh = info.project.refreshDiagnostics.bind(info.project)
     const pwd = info.project.getCurrentDirectory();
-    const addonsDir = info.config.addonsDir || `${pwd}/addons`;
+    config = info.config;
+    const addonsDir = () => config.addonDirectories ||= [`${pwd}/addons`];
     let cache: Map<string, { loc: string; classic: boolean }> = new Map();
 
     function log(msg: string, type = ts.server.Msg.Info) {
@@ -131,10 +143,9 @@ function init(modules: {
           name.startsWith("@") &&
           search(host.readFile(file) || "", odooPragma, odooClassicDefine)
         ) {
-          const redirect = name.replace(
-            odooNewImportPattern,
-            `${addonsDir}/$1/static/src/$2`
-          );
+          const redirect = addonsDir()
+            .map(dir => name.replace(odooNewImportPattern, `${dir}/$1/static/src/$2`))
+            .find(path => ts.sys.fileExists(path)) || '';
           return ts.classicNameResolver(
             redirect,
             file,
@@ -177,7 +188,7 @@ function init(modules: {
 
     return info.languageService;
   }
-  return { create };
+  return { create, onConfigurationUpdated };
 }
 
 export = init;

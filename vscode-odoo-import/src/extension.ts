@@ -9,7 +9,19 @@ export async function activate(context: vscode.ExtensionContext) {
   const api = tsExtension.exports.getAPI(0)
   if (!api) return
 
-  api.configurePlugin('odoo-import', {})
+  const get = vscode.workspace.getConfiguration;
+
+  function refresh() {
+    api.configurePlugin('odoo-import', {
+      addonDirectories: get('odooImport.addonDirectories')
+    })
+  }
+
+  refresh();
+
+  context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(event => {
+    if (event.affectsConfiguration('odooImport')) refresh()
+  }))
 
   console.log(
     'Congratulations, your extension "vscode-odoo-import" is now active!'
@@ -17,4 +29,4 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
