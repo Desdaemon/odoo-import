@@ -1,0 +1,8 @@
+[[language]]
+name = "typescript"
+language-server.args = [
+  "--stdio",
+  "--tsserver-path",
+  "./node_modules/typescript/lib"
+]
+

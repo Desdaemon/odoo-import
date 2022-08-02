@@ -72,3 +72,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 out
+pnpm-lock.yaml
+src/.code-workspace.code-workspace

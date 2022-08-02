@@ -1,11 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
-  tsserver-plugin: file:..
-  typescript: ^4.4.3
+  odoo-import: link:..
+  typescript: ^4.7.4
 
-dependencies:
-  tsserver-plugin: file:..
+devDependencies:
+  odoo-import: link:..
   typescript: 4.7.4
 
 packages:
@@ -14,12 +14,4 @@ packages:
     resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: false
-
-  file:..:
-    resolution: {directory: .., type: directory}
-    name: my-plugin
-    version: 0.0.1
-    dependencies:
-      typescript: 4.7.4
-    dev: false
+    dev: true

@@ -1006,9 +1006,10 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-"odoo-import@link:..":
-  version "0.0.0"
-  uid ""
+odoo-import@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/odoo-import/-/odoo-import-0.1.1.tgz#3d5e34e1f06fb0cb14049645902f6d827e452879"
+  integrity sha512-FWg6tEXaGAQkJNz6OwM6ad9kuquU/SWUKIIANr7e1f4jDhbCQsZfcKZ+zHycYFN//6sRJdBV2+GSd2lqs4cH3w==
 
 once@^1.3.0:
   version "1.4.0"
