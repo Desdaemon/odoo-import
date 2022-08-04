@@ -15,11 +15,11 @@ jobs:
         with:
           node-version: 16
           cache: yarn
-      - name: Verify bumped version
-        if: github.event_name == 'release'
-        run: test "v$(npm view odoo-import version)" = "{{ github.ref_name }}"
       - name: Install dependencies
         run: yarn
+      - name: Verify bumped version
+        if: github.event_name == 'release'
+        run: test "v$(jq -r '.version' package.json)" = "$GITHUB_REF_NAME"
       - name: Prepublish
         run: yarn prepublish
   testExtension:
@@ -32,13 +32,13 @@ jobs:
         with:
           node-version: 16
           cache: yarn
-      - name: Verify bumped version
-        if: github.event_name == 'release'
-        working-directory: vscode-odoo-import
-        run: test "v$(npm view vscode-odoo-import version)" = "{{ github.ref_name }}"
       - name: Install dependencies
         working-directory: vscode-odoo-import
         run: yarn
+      - name: Verify bumped version
+        if: github.event_name == 'release'
+        working-directory: vscode-odoo-import
+        run: test "v$(jq -r '.version' package.json)" = "$GITHUB_REF_NAME"
       - name: Prepublish
         working-directory: vscode-odoo-import
         run: yarn vscode:prepublish
@@ -69,6 +69,8 @@ jobs:
         with:
           node-version: 16
           cache: yarn
+      - name: Install dependencies
+        run: yarn
       - name: Publish to NPM
         id: publishPlugin
         uses: JS-DevTools/npm-publish@v1
@@ -94,26 +96,37 @@ jobs:
           cache: yarn
       - name: Depend on published plugin
         working-directory: vscode-odoo-import
-        run: yarn add "odoo-import@${{ needs.publishPlugin.outputs.version }}"
+        run: rm -rf node_modules && yarn add --force "odoo-import@$NEW_VERSION"
+        env:
+          NEW_VERSION: ${{ needs.publishPlugin.outputs.version }}
       - name: Install dependencies
         working-directory: vscode-odoo-import
         run: yarn
-      - name: Publish to OpenVSX
-        id: publishVsx
+      - name: Package extension
+        id: package
         uses: HaaLeo/publish-vscode-extension@v1
         with:
-          pat: ${{ secrets.OPEN_VSX_TOKEN }}
+          pat: stub
           packagePath: vscode-odoo-import
+          dryRun: true
+          yarn: true
+      - name: Publish to OpenVSX
+        uses: HaaLeo/publish-vscode-extension@v1
+        continue-on-error: true
+        with:
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
+          extensionFile: ${{ steps.package.outputs.vsixPath }}
           yarn: true
       - name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
+        continue-on-error: true
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: https://marketplace.visualstudio.com
-          extensionFile: ${{ steps.publishVsx.outputs.vsixPath }}
+          extensionFile: ${{ steps.package.outputs.vsixPath }}
           yarn: true
       - name: Add file to release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
-          files: ${{ steps.publishVsx.outputs.vsixPath }}
+          files: ${{ steps.package.outputs.vsixPath }}

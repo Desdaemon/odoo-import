@@ -1,21 +1,19 @@
 {
     "name": "odoo-import",
-    "version": "0.0.1",
+    "version": "0.1.3",
     "license": "MIT",
     "main": "./out",
     "engines": {
         "node": ">= 14.0.0"
     },
     "author": {
-        "name": "Viet Dinh <vidi@odoo.com>" 
+        "name": "Viet Dinh <vidi@odoo.com>"
     },
     "scripts": {
         "prepublish": "tsc"
     },
-    "dependencies": {
-        "typescript": "^4.4.3"
-    },
     "devDependencies": {
-        "@types/node": "^18.0.0"
+        "@types/node": "^18.0.0",
+        "typescript": "^4.4.3"
     }
 }

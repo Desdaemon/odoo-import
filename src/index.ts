@@ -46,6 +46,10 @@ function search(src: string, ...needle: string[]) {
   }
   return false;
 }
+interface CacheEntry {
+  loc: string;
+  classic: boolean;
+}
 
 function exclude<T>(left: T[], right: T[]) {
   return left.filter((elm) => !right.includes(elm));
@@ -150,9 +154,7 @@ function init(modules: { typescript: typeof ts }) {
     initWatchers();
 
     const walker = new Walker(ts, ...addonsDir());
-    for (const file of walker) {
-      updateCache(file);
-    }
+    for (const file of walker) updateCache(file);
 
     const cachedReplaceFinalReturn = cached(replaceFinalReturn);
     decorate(info.serverHost, "readFile", (readFile) => {
